@@ -1,0 +1,70 @@
+.colx1{
+    background-color: #33c8e2;
+
+}
+
+.colx2{
+    background-color: #a4e9f5;
+    width: 80%;
+    height: 50%t;
+    margin: 40px 40px ;
+}
+
+.text1{
+
+    color: #33c8e2;
+}
+
+.dib1 {
+    
+    float: right;
+    width:  500px;
+    height: 230px;
+    margin: -50px -45px ;
+    position: sticky;
+    padding: 0px;
+    border: 1px solid black;
+
+}
+
+.dib2 {
+    
+    float: right;
+    width:  170px;
+    height: 350px;
+    margin: 40px 40px ;
+    position: sticky;
+    padding: 0px;
+    border: 1px solid black;
+
+}
+.dib3 {
+    
+    float: left;
+    width:  170px;
+    height: 350px;
+    margin: 40px 40px ;
+    position: sticky;
+    padding: 0px;
+    border: 1px solid black;
+
+}
+
+.dib4 {
+    
+    float: left;
+    width:  500px;
+    height: 400px;
+    margin: -25px -22px ;
+    position: sticky;
+    padding: 0px;
+    border: 1px solid black;
+
+}
+
+.tam{
+
+    width:  100px;
+    
+
+}
