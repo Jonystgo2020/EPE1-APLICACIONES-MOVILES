@@ -1,6 +1,7 @@
-const http = require('http');
-const url = require('url');
-const fs = require('fs');
+const http=require('http');
+const url=require('url');
+const fs=require('fs');
+const querystring = require('querystring');
 
 const mime = {
     'html': 'text/html',
@@ -17,91 +18,84 @@ const servidor = http.createServer((pedido, respuesta) => {
     if (camino == 'web1/')
         camino = 'web1/index.html';
     encaminar(pedido, respuesta, camino);
-
-    function encaminar(pedido, respuesta, camino) {
-        console.log(camino);
-        switch (camino) {
-            case 'web1/cargar': {
-                grabarComentarios(pedido, respuesta);
+});    
+        servidor.listen(8888);
+        
+        function encaminar (pedido,respuesta,camino) {
+            switch (camino) {
+              case "web1/cargar": {
+                grabarComentarios(pedido,respuesta);
                 break;
-            }
-            case 'web1/leercomentarios': {
+              }	
+              case 'web1/leercomentarios': {
                 leerComentarios(respuesta);
                 break;
-            }
-            default: {
+              }			
+              default : {  
                 fs.stat(camino, error => {
-                    if (!error) {
-                        fs.readFile(camino, (error, contenido) => {
-                            if (error) {
-                                respuesta.writeHead(500, { 'Content-Type': 'text/html' });
-                                respuesta.write('error interno, no reconoce ruta');
-                                respuesta.end();
-                            } else {
-                                const vec = camino.split('.');
-                                const extension = vec[vec.length - 1];
-                                const mimearchivo = mime[extension];
-                                respuesta.writeHead(200, { 'Content-Type': mimearchivo });
-                                respuesta.write(contenido);
-                                respuesta.end();
-                            }
-                        });
-                    } else {
-
-                        respuesta.writeHead(404, { 'Content-Type': 'text/html' });
-                        respuesta.write('<!doctype html><html><head></head><body><h1>Recurso Inexistente</h1></body></html>');
+                  if (!error) {
+                    fs.readFile(camino,(error, contenido) => {
+                      if (error) {
+                        respuesta.writeHead(500, {'Content-Type': 'text/plain'});
+                        respuesta.write('Error interno');
+                        respuesta.end();					
+                      } else {
+                        const vec = camino.split('.');
+                        const extension=vec[vec.length-1];
+                        const mimearchivo=mime[extension];
+                        respuesta.writeHead(200, {'Content-Type': mimearchivo});
+                        respuesta.write(contenido);
                         respuesta.end();
+                      }
+                    });
+                  } else {
+                    respuesta.writeHead(404, {'Content-Type': 'text/html'});
+                    respuesta.write('<!doctype html><html><head></head><body>Recurso inexistente</body></html>');		
+                    respuesta.end();
+                  }
+                });	
+              }
+            }	
+          }
 
-
-                    }
-                
-                });
-            }}}
+    
+          function grabarComentarios(pedido,respuesta) {
+            let info = '';
+            pedido.on('data', datosparciales => {
+              info += datosparciales;
             });
-
-
-function grabarComentarios(pedido, respuesta) {
-    let info = '';
-    pedido.on('data', datosparciales => {
-        info += datosparciales;
-    });
-    pedido.on('end', () => {
-        const formulario = querystring.parse(info);
-        respuesta.writeHead(200, { 'Content-Type': 'text/html' });
-        const pagina =
-            `<!doctype html><html><head></head><body>
-     Nombre de usuario:${formulario['nombre']}<br>
-    Email:${formulario['email']}<br>
-    Comentarios:${formulario['comentarios']}<hr>
-    <a href="pagina3.html">Retornar</a>
-    </body></html>`;
-        respuesta.end(pagina);
-        grabarEnArchivo(formulario);
-    });
-}
-function grabarEnArchivo(formulario) {
-    const datos = `Nombre de usuario:${formulario['nombre']}<br>
-                Email:${formulario['email']}<br>
-                Comentarios:${formulario['comentarios']}<br><hr>`;
-    fs.appendFile('web1/visitas.txt', datos, error => {
-        if (error)
-            console.log(error);
-    });
-}
-
-function leerComentarios(respuesta) {
-    fs.readFile('web/visitas.txt', (error, datos) => {
-        respuesta.writeHead(200, { 'Content-Type': 'text/html' });
-        respuesta.write('<!doctype html><html><head></head><body>');
-        respuesta.write(datos);
-        respuesta.write(' </body></html>');
-        respuesta.end();
-    });
-
-}
-
-
-
-
-servidor.listen(8888);
-console.log('servidor web iniciado');
+            pedido.on('end', function(){
+              const formulario = querystring.parse(info);
+              respuesta.writeHead(200, {'Content-Type': 'text/html'});
+              const pagina=`<!doctype html><html><head></head><body>
+                          Nombre:${formulario['nombre']}<br>
+                          Email:${formulario['email']}<br>
+                          Comentarios:${formulario['comentarios']}<br>
+                          <a href="Pagina3.html">Retornar</a>
+                          </body></html>`;
+              respuesta.end(pagina);
+              grabarEnArchivo(formulario); 
+            });	
+          }
+          
+          function grabarEnArchivo(formulario) {
+            const datos=`nombre:${formulario['nombre']}<br>
+                         Email:${formulario['email']}<br>
+                         comentarios:${formulario['comentarios']}<hr>`;
+            fs.appendFile('web1/visitas.txt',datos, error => {
+              if (error)
+                console.log(error);
+            });
+          }
+          
+          function leerComentarios(respuesta) {
+            fs.readFile('web1/visitas.txt', (error,datos) => {
+              respuesta.writeHead(200, {'Content-Type': 'text/html'});
+              respuesta.write('<!doctype html><html><head></head><body>');
+              respuesta.write(datos);
+              respuesta.write('</body></html>');
+              respuesta.end();	      
+            });
+          }
+          
+          console.log('Servidor web iniciado');
