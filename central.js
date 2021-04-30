@@ -31,12 +31,11 @@ const servidor = http.createServer((pedido, respuesta) => {
                 leerComentarios(respuesta);
                 break;
               }		
-
-               case 'web1/leercomentarios': {
-                leerComentarios(respuesta);
+              case 'web1/userpass': {
+                userPass(pedido,respuesta);
                 break;
               }	
-              	
+
               default : {  
                 fs.stat(camino, error => {
                   if (!error) {
@@ -97,11 +96,23 @@ const servidor = http.createServer((pedido, respuesta) => {
           function leerComentarios(respuesta) {
             fs.readFile('web1/visitas.txt', (error,datos) => {
               respuesta.writeHead(200, {'Content-Type': 'text/html'});
-              respuesta.write('<!doctype html><html><head></head><body>');
+              respuesta.write('<!doctype html><html><head></head><body><center><br><a href="Pagina3.html">Retornar</a><br><br><hr>');
               respuesta.write(datos);
-              respuesta.write('</body></html>');
+              respuesta.write('</center></body></html>');
               respuesta.end();	      
             });
           }
+
+          function userPass(formulario) {
+            const dato1=`${formulario['nombre']}
+                         ${formulario['password']}`;
+            fs.readFile('web1/userpass.txt', (error, datos) => {
+                  if(datos == dato1){
+                    camino = 'web1/pagina8.html'
+                  }else{
+                    camino = 'web1/index.html'
+                  }
+                });          	      
+            }     
           
           console.log('Servidor web iniciado');

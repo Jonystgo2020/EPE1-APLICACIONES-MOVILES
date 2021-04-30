@@ -1,3 +1,11 @@
 nombre:Jonathan<br>
                          Email:jonathan.toloza.c@gmail.com<br>
-                         comentarios:hola<hr>
+                         comentarios:hola<hr>nombre:Rafael Acuña<br>
+                         Email:racuna@gmail.com<br>
+                         comentarios:Hola mundo<hr>nombre:Sabina Romero<br>
+                         Email:sromero@gmail.com<br>
+                         comentarios:hola<hr>nombre:Jhonathan Gutierrez<br>
+                         Email:jgutierres@gmail.com<br>
+                         comentarios:hola<hr>nombre:Gerson Valderrama<br>
+                         Email:gvalderrama<br>
+                         comentarios:hola Mundo!<hr>
