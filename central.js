@@ -30,7 +30,13 @@ const servidor = http.createServer((pedido, respuesta) => {
               case 'web1/leercomentarios': {
                 leerComentarios(respuesta);
                 break;
-              }			
+              }		
+
+               case 'web1/leercomentarios': {
+                leerComentarios(respuesta);
+                break;
+              }	
+              	
               default : {  
                 fs.stat(camino, error => {
                   if (!error) {
